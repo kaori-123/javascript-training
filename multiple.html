@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multiple</title>
+    <style type="text/css">
+        .input-header{
+            display: inline-block;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <h1>FizzBuzz問題</h1>
+    <div id="input-area">
+        <font class="input-header">FizzNum:</font> <input type="text" id="fizzNumInput">
+        </br>
+        <font class="input-header">BuzzNum:</font> <input type="text" id="buzzNumInput">
+    </div>
+    <button onclick="execute();">実行</button>
+
+    <h3>【出力】</h3>
+    <div id="output-area"></div>
+
+    <script>
+        function execute(){
+            let fizzNum = document.getElementById('fizzNumInput').value;
+            let buzzNum = document.getElementById('buzzNumInput').value;
+            let parent  = document.getElementById('output-area');
+            parent.innerHTML = "";
+
+            if(inputCheck(fizzNum,buzzNum)){
+                muliple_calculation(fizzNum,buzzNum);
+            }
+        }
+        function muliple_calculation(fizzNum,buzzNum){
+            let str;
+
+            for (let i = 1; i < 100; i++){
+                if((i % fizzNum === 0) && (i % buzzNum === 0)){
+                    str = "fizzBuzz";
+                }else if(i % fizzNum === 0){
+                    str = "fizz";
+                }else if(i % buzzNum === 0){
+                    str = "buzz";
+                }else{
+                    str = "";
+                }
+                if(str !== ""){
+                    html_output(i, str);
+                }
+            }
+        }
+        function html_output(num, str){
+            let elem = document.createElement('div');
+            let parent  = document.getElementById('output-area');
+            elem.innerHTML = str + ' ' + num;
+            parent.appendChild(elem);
+        }
+        function inputCheck(fizzNum,buzzNum){
+            fizzNum = parseFloat(fizzNum);
+            buzzNum = parseFloat(fizzNum);
+
+            if(Number.isInteger(fizzNum) && Number.isInteger(buzzNum)){
+                return true;
+            }else{
+                let elem = document.createElement('div');
+                let parent  = document.getElementById('output-area');
+                elem.innerHTML = '整数値を入力して下さい';
+                parent.appendChild(elem);
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
