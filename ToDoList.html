@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDoリスト</title>
+  </head>
+  <body>
+    <style type="text/css"></style>
+    <h1>ToDoリスト</h1>
+    <div id="status-select-area">
+      <input type="radio" name="status-select" value="all" checked />すべて
+      <input type="radio" name="status-select" value="working" />作業中
+      <input type="radio" name="status-select" value="done" />完了
+    </div>
+    <div id="output-area"></div>
+    <div class="input-area">
+      <h2>新規タスクの追加</h2>
+      <input type="text" id="add-input" />
+      <button id="add-submit">追加</button>
+    </div>
+    <script>
+      const outputArea = document.getElementById("output-area");
+      const addBtn = document.getElementById("add-submit");
+      const taskArray = [];
+
+      addBtn.addEventListener(
+        "click",
+        function () {
+          //表示領域をクリア
+          outputArea.innerHTML = "";
+          //オブジェクトに値をセットして配列に格納する
+          const newTask = document.getElementById("add-input");
+          const taskObj = { comment: newTask.value, status: "作業中" };
+          taskArray.push(taskObj);
+          //テーブル部分を出力する
+          outputTbaleHtml();
+          //テキストボックスをクリア
+          newTask.value = "";
+        },
+        false
+      );
+
+      //HTML出力する関数
+      function outputTbaleHtml() {
+        const tbl = document.createElement("table");
+        const tblBody = document.createElement("tbody");
+        const trHeader = document.createElement("tr");
+
+        //ヘッダー部分
+        const headerArray = ["ID", "コメント", "状態"];
+        headerArray.forEach(function (element) {
+          var cell = document.createElement("th");
+          cell.textContent = element;
+          trHeader.appendChild(cell);
+        });
+        tblBody.appendChild(trHeader);
+
+        //ボディ部分
+        taskArray.forEach(function (element, id) {
+          const trBody = document.createElement("tr");
+          //ID・コメント
+          const bodyArrayText = [id, element.comment];
+          bodyArrayText.forEach(function (element) {
+            var cell = document.createElement("td");
+            cell.textContent = element;
+            trBody.appendChild(cell);
+          });
+          //ステータス・削除
+          const bodyArrayButton = [element.status, "削除"];
+          bodyArrayButton.forEach(function (element) {
+            var cell = document.createElement("td");
+            let statusBtn = document.createElement("button");
+            statusBtn.innerHTML = element;
+            cell.appendChild(statusBtn);
+            trBody.appendChild(cell);
+          });
+          tblBody.appendChild(trBody);
+        });
+        tbl.appendChild(tblBody);
+        outputArea.appendChild(tbl);
+      }
+    </script>
+  </body>
+</html>
