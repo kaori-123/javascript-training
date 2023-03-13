@@ -23,19 +23,19 @@
     <script>
       const outputArea = document.getElementById("output-area");
       const addBtn = document.getElementById("add-submit");
-      const taskArray = [];
+      const tasks = [];
 
       addBtn.addEventListener(
         "click",
-        function () {
+        () => {
           //表示領域をクリア
           outputArea.innerHTML = "";
           //オブジェクトに値をセットして配列に格納する
           const newTask = document.getElementById("add-input");
           const taskObj = { comment: newTask.value, status: "作業中" };
-          taskArray.push(taskObj);
+          tasks.push(taskObj);
           //テーブル部分を出力する
-          outputTbaleHtml();
+          outputTableHtml();
           //テキストボックスをクリア
           newTask.value = "";
         },
@@ -43,43 +43,65 @@
       );
 
       //HTML出力する関数
-      function outputTbaleHtml() {
+      function outputTableHtml() {
         const tbl = document.createElement("table");
         const tblBody = document.createElement("tbody");
         const trHeader = document.createElement("tr");
 
         //ヘッダー部分
-        const headerArray = ["ID", "コメント", "状態"];
-        headerArray.forEach(function (element) {
-          var cell = document.createElement("th");
+        const headers = ["ID", "コメント", "状態"];
+        headers.forEach((element) => {
+          const cell = document.createElement("th");
           cell.textContent = element;
           trHeader.appendChild(cell);
         });
         tblBody.appendChild(trHeader);
 
         //ボディ部分
-        taskArray.forEach(function (element, id) {
+        tasks.forEach((element, id) => {
           const trBody = document.createElement("tr");
-          //ID・コメント
-          const bodyArrayText = [id, element.comment];
-          bodyArrayText.forEach(function (element) {
-            var cell = document.createElement("td");
-            cell.textContent = element;
-            trBody.appendChild(cell);
-          });
-          //ステータス・削除
-          const bodyArrayButton = [element.status, "削除"];
-          bodyArrayButton.forEach(function (element) {
-            var cell = document.createElement("td");
-            let statusBtn = document.createElement("button");
-            statusBtn.innerHTML = element;
-            cell.appendChild(statusBtn);
-            trBody.appendChild(cell);
-          });
+
+          // id要素を生成して返却する処理の関数
+          const idElement = createIdElement(id);
+          trBody.appendChild(idElement);
+          // コメント要素を生成して返却する処理の関数
+          const commentElement = createCommentElement(element.comment);
+          trBody.appendChild(commentElement);
+          // 状態ボタンを生成して返却する処理の関数
+          const statusButton = createStatusButton(element.status);
+          trBody.appendChild(statusButton);
+          // 削除ボタンを生成して返却する処理の関数
+          const deleteButton = createDeleteButton();
+
+          trBody.appendChild(deleteButton);
           tblBody.appendChild(trBody);
         });
         tbl.appendChild(tblBody);
         outputArea.appendChild(tbl);
+      }
+      function createIdElement(id) {
+        const cell = document.createElement("td");
+        cell.textContent = id;
+        return cell;
+      }
+      function createCommentElement(comment) {
+        const cell = document.createElement("td");
+        cell.textContent = comment;
+        return cell;
+      }
+      function createStatusButton(status) {
+        const cell = document.createElement("td");
+        const statusBtn = document.createElement("button");
+        statusBtn.innerHTML = status;
+        cell.appendChild(statusBtn);
+        return cell;
+      }
+      function createDeleteButton() {
+        const cell = document.createElement("td");
+        const statusBtn = document.createElement("button");
+        statusBtn.innerHTML = "削除";
+        cell.appendChild(statusBtn);
+        return cell;
       }
     </script>
   </body>
