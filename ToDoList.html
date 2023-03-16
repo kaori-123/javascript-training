@@ -43,7 +43,7 @@
       );
 
       //HTML出力する関数
-      function outputTableHtml() {
+      const outputTableHtml = () => {
         const tbl = document.createElement("table");
         const tblBody = document.createElement("tbody");
         const trHeader = document.createElement("tr");
@@ -78,31 +78,31 @@
         });
         tbl.appendChild(tblBody);
         outputArea.appendChild(tbl);
-      }
-      function createIdElement(id) {
+      };
+      const createIdElement = (id) => {
         const cell = document.createElement("td");
         cell.textContent = id;
         return cell;
-      }
-      function createCommentElement(comment) {
+      };
+      const createCommentElement = (comment) => {
         const cell = document.createElement("td");
         cell.textContent = comment;
         return cell;
-      }
-      function createStatusButton(status) {
+      };
+      const createStatusButton = (status) => {
         const cell = document.createElement("td");
         const statusBtn = document.createElement("button");
         statusBtn.innerHTML = status;
         cell.appendChild(statusBtn);
         return cell;
-      }
-      function createDeleteButton() {
+      };
+      const createDeleteButton = () => {
         const cell = document.createElement("td");
         const statusBtn = document.createElement("button");
         statusBtn.innerHTML = "削除";
         cell.appendChild(statusBtn);
         return cell;
-      }
+      };
     </script>
   </body>
 </html>
