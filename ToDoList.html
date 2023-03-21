@@ -42,21 +42,6 @@
         },
         false
       );
-      // 削除ボタンクリック
-      document.addEventListener(
-        "click",
-        (e) => {
-          target = e.target.id.split("_");
-          if (target[0] === "del") {
-            //配列からオブジェクトを削除する
-            tasks.splice(target[1], 1);
-            //テーブル部分を再出力する
-            outputArea.innerHTML = "";
-            outputTableHtml();
-          }
-        },
-        false
-      );
       //HTML出力する関数
       const outputTableHtml = () => {
         const tbl = document.createElement("table");
@@ -117,8 +102,16 @@
         const statusBtn = document.createElement("button");
         statusBtn.innerHTML = "削除";
         statusBtn.setAttribute("id", "del_" + id);
+        statusBtn.addEventListener("click", clickDeleteButton, false);
         cell.appendChild(statusBtn);
         return cell;
+      };
+      const clickDeleteButton = (id) => {
+        //配列からオブジェクトを削除する
+        tasks.splice(id, 1);
+        //テーブル部分を再出力する
+        outputArea.innerHTML = "";
+        outputTableHtml();
       };
     </script>
   </body>
