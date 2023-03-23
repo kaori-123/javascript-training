@@ -25,6 +25,7 @@
       const addBtn = document.getElementById("add-submit");
       const tasks = [];
 
+      // 追加ボタンクリック
       addBtn.addEventListener(
         "click",
         () => {
@@ -41,7 +42,6 @@
         },
         false
       );
-
       //HTML出力する関数
       const outputTableHtml = () => {
         const tbl = document.createElement("table");
@@ -71,7 +71,7 @@
           const statusButton = createStatusButton(element.status);
           trBody.appendChild(statusButton);
           // 削除ボタンを生成して返却する処理の関数
-          const deleteButton = createDeleteButton();
+          const deleteButton = createDeleteButton(id);
 
           trBody.appendChild(deleteButton);
           tblBody.appendChild(trBody);
@@ -79,6 +79,7 @@
         tbl.appendChild(tblBody);
         outputArea.appendChild(tbl);
       };
+
       const createIdElement = (id) => {
         const cell = document.createElement("td");
         cell.textContent = id;
@@ -96,12 +97,21 @@
         cell.appendChild(statusBtn);
         return cell;
       };
-      const createDeleteButton = () => {
+      const createDeleteButton = (id) => {
         const cell = document.createElement("td");
         const statusBtn = document.createElement("button");
         statusBtn.innerHTML = "削除";
+        statusBtn.setAttribute("id", "del_" + id);
+        statusBtn.addEventListener("click", clickDeleteButton, false);
         cell.appendChild(statusBtn);
         return cell;
+      };
+      const clickDeleteButton = (id) => {
+        //配列からオブジェクトを削除する
+        tasks.splice(id, 1);
+        //テーブル部分を再出力する
+        outputArea.innerHTML = "";
+        outputTableHtml();
       };
     </script>
   </body>
