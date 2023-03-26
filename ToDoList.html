@@ -68,12 +68,12 @@
           const commentElement = createCommentElement(element.comment);
           trBody.appendChild(commentElement);
           // 状態ボタンを生成して返却する処理の関数
-          const statusButton = createStatusButton(element.status);
+          const statusButton = createStatusButton(element.status, id);
           trBody.appendChild(statusButton);
           // 削除ボタンを生成して返却する処理の関数
           const deleteButton = createDeleteButton(id);
-
           trBody.appendChild(deleteButton);
+
           tblBody.appendChild(trBody);
         });
         tbl.appendChild(tblBody);
@@ -90,10 +90,12 @@
         cell.textContent = comment;
         return cell;
       };
-      const createStatusButton = (status) => {
+      const createStatusButton = (status, id) => {
         const cell = document.createElement("td");
         const statusBtn = document.createElement("button");
         statusBtn.innerHTML = status;
+        statusBtn.setAttribute("id", "status_" + id);
+        statusBtn.addEventListener("click", clickStatusChangeButton, false);
         cell.appendChild(statusBtn);
         return cell;
       };
@@ -106,9 +108,27 @@
         cell.appendChild(statusBtn);
         return cell;
       };
-      const clickDeleteButton = (id) => {
+      const clickDeleteButton = (e) => {
+        //idを取得する
+        const id = e.currentTarget.id.replace("del_", "");
         //配列からオブジェクトを削除する
         tasks.splice(id, 1);
+        //テーブル部分を再出力する
+        outputArea.innerHTML = "";
+        outputTableHtml();
+      };
+      const clickStatusChangeButton = (e) => {
+        //idを取得する
+        const id = e.currentTarget.id.replace("status_", "");
+        //ステータスを変更する
+        const status_tmp = tasks[id].status;
+
+        if (status_tmp === "作業中") {
+          tasks[id].status = "完了";
+        } else {
+          tasks[id].status = "作業中";
+        }
+
         //テーブル部分を再出力する
         outputArea.innerHTML = "";
         outputTableHtml();
