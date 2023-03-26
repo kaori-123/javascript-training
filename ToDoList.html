@@ -10,9 +10,9 @@
     <style type="text/css"></style>
     <h1>ToDoリスト</h1>
     <div id="status-select-area">
-      <input type="radio" name="status-select" value="all" checked />すべて
-      <input type="radio" name="status-select" value="working" />作業中
-      <input type="radio" name="status-select" value="done" />完了
+      <input type="radio" name="status-select" value="すべて" checked />すべて
+      <input type="radio" name="status-select" value="作業中" />作業中
+      <input type="radio" name="status-select" value="完了" />完了
     </div>
     <div id="output-area"></div>
     <div class="input-area">
@@ -21,65 +21,18 @@
       <button id="add-submit">追加</button>
     </div>
     <script>
-      const outputArea = document.getElementById("output-area");
-      const addBtn = document.getElementById("add-submit");
-      const tasks = [];
-
-      // 追加ボタンクリック
-      addBtn.addEventListener(
-        "click",
-        () => {
-          //表示領域をクリア
-          outputArea.innerHTML = "";
-          //オブジェクトに値をセットして配列に格納する
-          const newTask = document.getElementById("add-input");
-          const taskObj = { comment: newTask.value, status: "作業中" };
-          tasks.push(taskObj);
-          //テーブル部分を出力する
-          outputTableHtml();
-          //テキストボックスをクリア
-          newTask.value = "";
-        },
-        false
-      );
-      //HTML出力する関数
-      const outputTableHtml = () => {
-        const tbl = document.createElement("table");
-        const tblBody = document.createElement("tbody");
-        const trHeader = document.createElement("tr");
-
-        //ヘッダー部分
-        const headers = ["ID", "コメント", "状態"];
-        headers.forEach((element) => {
-          const cell = document.createElement("th");
-          cell.textContent = element;
-          trHeader.appendChild(cell);
-        });
-        tblBody.appendChild(trHeader);
-
-        //ボディ部分
-        tasks.forEach((element, id) => {
-          const trBody = document.createElement("tr");
-
-          // id要素を生成して返却する処理の関数
-          const idElement = createIdElement(id);
-          trBody.appendChild(idElement);
-          // コメント要素を生成して返却する処理の関数
-          const commentElement = createCommentElement(element.comment);
-          trBody.appendChild(commentElement);
-          // 状態ボタンを生成して返却する処理の関数
-          const statusButton = createStatusButton(element.status, id);
-          trBody.appendChild(statusButton);
-          // 削除ボタンを生成して返却する処理の関数
-          const deleteButton = createDeleteButton(id);
-          trBody.appendChild(deleteButton);
-
-          tblBody.appendChild(trBody);
-        });
-        tbl.appendChild(tblBody);
-        outputArea.appendChild(tbl);
+      /** 関数群 **/
+      const addEventRadio = () => {
+        const radio_btns = document.querySelectorAll(
+          `input[type='radio'][name='status-select']`
+        );
+        for (let target of radio_btns) {
+          target.addEventListener("change", () => {
+            outputArea.innerHTML = "";
+            outputTableHtml();
+          });
+        }
       };
-
       const createIdElement = (id) => {
         const cell = document.createElement("td");
         cell.textContent = id;
@@ -133,6 +86,85 @@
         outputArea.innerHTML = "";
         outputTableHtml();
       };
+      //ラジオボタンのチェックされている項目を取得する関数
+      const checkedRadioButton = () => {
+        const statusSelects = document.querySelectorAll(
+          "input[name=status-select]"
+        );
+        let checkedStr;
+        statusSelects.forEach((statusSelect) => {
+          if (statusSelect.checked) {
+            checkedStr = statusSelect.value;
+          }
+        });
+        return checkedStr;
+      };
+      //HTML出力する関数
+      const outputTableHtml = () => {
+        const tbl = document.createElement("table");
+        const tblBody = document.createElement("tbody");
+        const trHeader = document.createElement("tr");
+        const statusSelect = checkedRadioButton();
+
+        //ヘッダー部分
+        const headers = ["ID", "コメント", "状態"];
+        headers.forEach((element) => {
+          const cell = document.createElement("th");
+          cell.textContent = element;
+          trHeader.appendChild(cell);
+        });
+        tblBody.appendChild(trHeader);
+
+        //ボディ部分
+        tasks.forEach((element, id) => {
+          if (statusSelect === "すべて" || element.status === statusSelect) {
+            const trBody = document.createElement("tr");
+
+            // id要素を生成して返却する処理の関数
+            const idElement = createIdElement(id);
+            trBody.appendChild(idElement);
+            // コメント要素を生成して返却する処理の関数
+            const commentElement = createCommentElement(element.comment);
+            trBody.appendChild(commentElement);
+            // 状態ボタンを生成して返却する処理の関数
+            const statusButton = createStatusButton(element.status, id);
+            trBody.appendChild(statusButton);
+            // 削除ボタンを生成して返却する処理の関数
+            const deleteButton = createDeleteButton(id);
+            trBody.appendChild(deleteButton);
+
+            tblBody.appendChild(trBody);
+          }
+        });
+        tbl.appendChild(tblBody);
+        outputArea.appendChild(tbl);
+      };
+
+      /** ロード時 **/
+      const outputArea = document.getElementById("output-area");
+      const addBtn = document.getElementById("add-submit");
+      const tasks = [];
+      // ラジオボタンにchangeイベントを追加する関数
+      addEventRadio();
+
+      /** クリックイベント **/
+      // 追加ボタンクリック
+      addBtn.addEventListener(
+        "click",
+        () => {
+          //表示領域をクリア
+          outputArea.innerHTML = "";
+          //オブジェクトに値をセットして配列に格納する
+          const newTask = document.getElementById("add-input");
+          const taskObj = { comment: newTask.value, status: "作業中" };
+          tasks.push(taskObj);
+          //テーブル部分を出力する
+          outputTableHtml();
+          //テキストボックスをクリア
+          newTask.value = "";
+        },
+        false
+      );
     </script>
   </body>
 </html>
